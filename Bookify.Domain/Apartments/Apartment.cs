@@ -18,12 +18,13 @@ public sealed class Apartment : Entity
 
     public List<Amenity> Amenities { get; private set; } = new();
 
-    public Apartment(Guid id, Name name, Description description, Address address, Money price, Money cleaningFee) : base(id)
+    public Apartment(Guid id, Name name, Description description, Address address, Money price, Money cleaningFee, List<Amenity> amenities) : base(id)
     {
         Name = name;
         Description = description;
         Address = address;
         Price = price;
         CleaningFee = cleaningFee;
+        Amenities = amenities;
     }
 }
