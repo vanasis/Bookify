@@ -8,4 +8,24 @@ public abstract class Entity
     {
         Id = id;
     }
+
+    #region Domain Event
+    private readonly List<IDomainEvent> _domainEvents = new();
+
+    public IReadOnlyList<IDomainEvent> GetDomainEvents()
+    {
+        return _domainEvents.ToList();
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
+
+    // Raise a domain event when something happen inside domain level
+    protected void RaiseDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+    #endregion
 }
