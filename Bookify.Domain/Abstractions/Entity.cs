@@ -1,4 +1,6 @@
-﻿namespace Bookify.Domain.Abstractions;
+﻿using Bookify.Domain.Apartments;
+
+namespace Bookify.Domain.Abstractions;
 
 public abstract class Entity
 {
