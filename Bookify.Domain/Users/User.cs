@@ -16,6 +16,7 @@ public sealed class User : Entity
         Email = email;
     }
 
+    // factory method
     public static User Create(FirstName firstName, LastName lastName, Email email)
     {
         var user = new User(Guid.NewGuid(), firstName, lastName, email);
