@@ -1,4 +1,5 @@
-﻿using Bookify.Application.Abstractions.Messaging;
+﻿using Bookify.Application.Abstractions.Clock;
+using Bookify.Application.Abstractions.Messaging;
 using Bookify.Domain.Abstractions;
 using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
@@ -13,15 +14,17 @@ internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBook
     private readonly IBookingRepository _bookingRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly PricingService _pricingService;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public ReserveBookingCommandHandler(IUserRepository userRepository, IApartmentRepository apartmentRepository,
-        IBookingRepository bookingRepository, IUnitOfWork unitOfWork, PricingService pricingService)
+        IBookingRepository bookingRepository, IUnitOfWork unitOfWork, PricingService pricingService, IDateTimeProvider dateTimeProvider)
     {
         _userRepository = userRepository;
         _apartmentRepository = apartmentRepository;
         _bookingRepository = bookingRepository;
         _unitOfWork = unitOfWork;
         _pricingService = pricingService;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Result<Guid>> Handle(ReserveBookingCommand request, CancellationToken cancellationToken)
@@ -47,7 +50,7 @@ internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBook
             return Result.Failure<Guid>(BookingErrors.Overlap);
         }
 
-        var booking = Booking.Reserve(apartment, user.Id, duration, DateTime.UtcNow, _pricingService);
+        var booking = Booking.Reserve(apartment, user.Id, duration, _dateTimeProvider.UtcNow, _pricingService);
 
         _bookingRepository.Add(booking);
 
